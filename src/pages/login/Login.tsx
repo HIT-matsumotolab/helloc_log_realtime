@@ -9,7 +9,7 @@ type Props = {};
 
 type State = {
   redirect: string | null;
-  username: string;
+  mail: string;
   password: string;
   loading: boolean;
   message: string;
@@ -22,44 +22,44 @@ export default class Login extends Component<Props, State> {
 
     this.state = {
       redirect: null,
-      username: "",
+      mail: "",
       password: "",
       loading: false,
       message: "",
     };
   }
 
-  componentDidMount() {
-    const currentUser = AuthService.getCurrentUser();
-
+  async componentDidMount() {
+    const currentUser = await AuthService.getCurrentUser();
+    console.log("login" + currentUser);
     if (currentUser) {
-      this.setState({ redirect: "/" });
+      this.setState({ redirect: "/home" });
     }
   }
 
-  componentWillUnmount() {
-    window.location.reload();
-  }
+  // componentWillUnmount() {
+  //   window.location.reload();
+  // }
 
   validationSchema() {
     return Yup.object().shape({
-      username: Yup.string().required("This field is required!"),
+      mail: Yup.string().required("This field is required!"),
       password: Yup.string().required("This field is required!"),
     });
   }
 
-  handleLogin(formValue: { username: string; password: string }) {
-    const { username, password } = formValue;
+  handleLogin(formValue: { mail: string; password: string }) {
+    const { mail, password } = formValue;
 
     this.setState({
       message: "",
       loading: true,
     });
 
-    AuthService.login(username, password).then(
+    AuthService.login(mail, password).then(
       () => {
         this.setState({
-          redirect: "/",
+          redirect: "/home",
         });
       },
       (error) => {
@@ -86,7 +86,7 @@ export default class Login extends Component<Props, State> {
     const { loading, message } = this.state;
 
     const initialValues = {
-      username: "",
+      mail: "",
       password: "",
     };
 
@@ -106,10 +106,15 @@ export default class Login extends Component<Props, State> {
           >
             <Form>
               <div className="form-group">
-                <label htmlFor="username">Mail</label>
-                <Field name="username" type="text" className="form-control" />
+                <label htmlFor="mail">Email</label>
+                <Field
+                  name="mail"
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter your email"
+                />
                 <ErrorMessage
-                  name="username"
+                  name="mail"
                   component="div"
                   className="alert alert-danger"
                 />
@@ -121,6 +126,7 @@ export default class Login extends Component<Props, State> {
                   name="password"
                   type="password"
                   className="form-control"
+                  placeholder="Enter your password"
                 />
                 <ErrorMessage
                   name="password"

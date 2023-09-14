@@ -1,10 +1,14 @@
 @import "./variables.scss";
 @import "./responsive.scss";
 
-body {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  // min-height: 100vh; /* 画面の高さを最低100%に設定 */
+}
+
+body {
   background-color: $main-bg;
 }
 
@@ -17,6 +21,7 @@ a {
   font-family: "Inter", sans-serif;
   background-color: $main-bg;
   color: $main-color;
+  min-height: 100vh; /* 画面の高さを最低100%に設定 */
 }
 
 .container {
@@ -35,5 +40,5 @@ a {
 
 .contentContainer {
   padding: 5px 20px;
-  width: 100%;
+  width: 90%;
 }

@@ -3,6 +3,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px;
+  bottom: 0;
+  position: fixed;
 
   span {
     &:first-child {

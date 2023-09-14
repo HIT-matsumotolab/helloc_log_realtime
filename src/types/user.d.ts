@@ -1,15 +1,14 @@
-export interface Users {
+export interface UsersType {
   user_id: number;
   name: string;
   mail: string;
-  password_hash: string;
   role: string;
 }
 
-export interface User {
+export interface UserType {
   user_id: number;
   name: string;
   mail: string;
-  password_hash: string;
   role: string;
+  accessToken: string;
 }

@@ -4,8 +4,8 @@ import "./users.scss";
 import { useState } from "react";
 import Add from "../../components/add/Add";
 import { UseQueryResult } from "@tanstack/react-query";
-import { UsersType } from "../../types/user";
-import { useFetchUsers } from "../../api/users/Users";
+import { UserType, UsersType } from "../../types/user";
+import { useFetchUser, useFetchUsers } from "../../api/users/Users";
 import Loading from "../loading/Loading";
 
 const columns: GridColDef[] = [
@@ -36,15 +36,15 @@ const columns: GridColDef[] = [
   },
 ];
 
-const Users = () => {
+const UserDetail = () => {
   const [open, setOpen] = useState(false);
-  const postQuery: UseQueryResult<UsersType[], unknown> = useFetchUsers();
+  const postQuery: UseQueryResult<UserType, unknown> = useFetchUser();
   if (postQuery.isLoading) return <Loading />;
   if (postQuery.isError) return <h1>Error loading data!!!</h1>;
-  const userRows = postQuery.data.map((user) => ({
-    id: user.user_id, // 一意のIDを設定
-    ...user, // 他のプロパティも保持
-  }));
+  //   const userRows = postQuery.data.map((user) => ({
+  //     id: user.user_id, // 一意のIDを設定
+  //     ...user, // 他のプロパティも保持
+  //   }));
 
   // TEST THE API
 
@@ -60,9 +60,11 @@ const Users = () => {
     <div className="users">
       <div className="info">
         <h1>Users</h1>
-        <button onClick={() => setOpen(true)}>Add New User</button>
+        <p>{postQuery.data.name}</p>
+        <p>{postQuery.data.mail}</p>
+        {/* <button onClick={() => setOpen(true)}>Add New User</button> */}
       </div>
-      <DataTable slug="users" columns={columns} rows={userRows} />
+      {/* <DataTable slug="users" columns={columns} rows={userRows} /> */}
       {/* TEST THE API */}
 
       {/* {isLoading ? (
@@ -75,4 +77,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default UserDetail;

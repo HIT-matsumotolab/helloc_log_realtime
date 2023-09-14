@@ -1,15 +1,15 @@
+import "./groups.scss";
 import { GridColDef } from "@mui/x-data-grid";
 import DataTable from "../../components/dataTable/DataTable";
-import "./users.scss";
 import { useState } from "react";
 import Add from "../../components/add/Add";
 import { UseQueryResult } from "@tanstack/react-query";
-import { UsersType } from "../../types/user";
-import { useFetchUsers } from "../../api/users/Users";
+import { GroupsType } from "../../types/group";
+import { useFetchGroups } from "../../api/groups/Groups";
 import Loading from "../loading/Loading";
 
 const columns: GridColDef[] = [
-  { field: "user_id", headerName: "ID", width: 90 },
+  { field: "group_id", headerName: "ID", width: 90 },
   {
     field: "name",
     type: "string",
@@ -17,15 +17,21 @@ const columns: GridColDef[] = [
     width: 150,
   },
   {
-    field: "mail",
+    field: "summary",
     type: "string",
-    headerName: "Email",
+    headerName: "Summary",
     width: 200,
   },
   {
-    field: "role",
+    field: "access_key",
     type: "string",
-    headerName: "Role",
+    headerName: "AccessKey",
+    width: 150,
+  },
+  {
+    field: "user_id",
+    type: "number",
+    headerName: "CreatorID",
     width: 150,
   },
   {
@@ -36,14 +42,16 @@ const columns: GridColDef[] = [
   },
 ];
 
-const Users = () => {
+const Groups = () => {
   const [open, setOpen] = useState(false);
-  const postQuery: UseQueryResult<UsersType[], unknown> = useFetchUsers();
+  const postQuery: UseQueryResult<GroupsType[], unknown> = useFetchGroups();
+  console.log(postQuery);
+
   if (postQuery.isLoading) return <Loading />;
   if (postQuery.isError) return <h1>Error loading data!!!</h1>;
-  const userRows = postQuery.data.map((user) => ({
-    id: user.user_id, // 一意のIDを設定
-    ...user, // 他のプロパティも保持
+  const groupRows = postQuery.data.map((group) => ({
+    id: group.group_id, // 一意のIDを設定
+    ...group, // 他のプロパティも保持
   }));
 
   // TEST THE API
@@ -57,12 +65,12 @@ const Users = () => {
   // });
 
   return (
-    <div className="users">
+    <div className="groups">
       <div className="info">
-        <h1>Users</h1>
-        <button onClick={() => setOpen(true)}>Add New User</button>
+        <h1>Groups</h1>
+        <button onClick={() => setOpen(true)}>Add New Group</button>
       </div>
-      <DataTable slug="users" columns={columns} rows={userRows} />
+      <DataTable slug="gorups" columns={columns} rows={groupRows} />
       {/* TEST THE API */}
 
       {/* {isLoading ? (
@@ -70,9 +78,9 @@ const Users = () => {
       ) : (
         <DataTable slug="users" columns={columns} rows={data} />
       )} */}
-      {open && <Add slug="user" columns={columns} setOpen={setOpen} />}
+      {open && <Add slug="group" columns={columns} setOpen={setOpen} />}
     </div>
   );
 };
 
-export default Users;
+export default Groups;
