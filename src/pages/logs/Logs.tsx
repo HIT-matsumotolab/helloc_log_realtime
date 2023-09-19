@@ -1,77 +1,66 @@
 import "./logs.scss";
-import { useMemo } from "react";
-import { UseQueryResult } from "@tanstack/react-query";
-import Loading from "../loading/Loading";
-import { useFetchInfomationLogs } from "../../api/logs/Logs";
-import { InfomationLog, Log, Record } from "../../types/log";
-import { Link, useParams } from "react-router-dom";
-import { MRT_ColumnDef } from "material-react-table";
-import { Box } from "@mui/material";
-import Examples from "../../components/dataTable/Examples";
+import { Box, Tab, Tabs, Typography } from "@mui/material";
+import React from "react";
+import { Circle } from "@mui/icons-material";
+import { LogsTable } from "../../components/logs/LogsTable";
+import { RealTime } from "../../components/logs/RealTime";
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
 
-const Logs = () => {
-  const { collectionId, recordId, logId } = useParams();
-  const postQuery: UseQueryResult<Log[], unknown> = useFetchInfomationLogs();
-  const columns = useMemo<MRT_ColumnDef<InfomationLog>[]>(
-    () => [
-      {
-        id: "question",
-        header: "InfomationLogs",
-        columns: [
-          {
-            accessorKey: "question_id",
-            id: "question_id",
-            header: "QuestionID",
-            size: 150,
-            Cell: ({ renderedCellValue, row }) => (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "1rem",
-                }}
-              >
-                <span>{renderedCellValue}</span>
-              </Box>
-            ),
-          },
-        ],
-      },
-      {
-        id: "actions",
-        header: "Actions",
-        size: 100,
-        Cell: ({ row }) => (
-          <Link to={`/logs/${collectionId}/${recordId}/info`}>
-            <img
-              src="/link.svg"
-              alt=""
-              style={{
-                display: "block",
-                margin: "auto",
-              }}
-            />
-          </Link>
-        ),
-      },
-    ],
-    [collectionId, recordId]
-  );
-  if (postQuery.isLoading) return <Loading />;
-  if (postQuery.isError) return <h1>Error loading data!!!</h1>;
-  const infoRows = postQuery.data.map((user) => ({
-    id: `info/${user.user_id}`,
-    ...user,
-  }));
-  console.log(infoRows);
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
 
   return (
-    <div className="logs">
-      <div className="info">
-        <h1>Logs</h1>
-        <p>取得したい問題を選択</p>
-      </div>
-      <Examples slug="info" columns={columns} rows={infoRows} />
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
+const Logs = () => {
+  const [value, setValue] = React.useState(0);
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+  return (
+    <div>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
+          <Tab label="Log" {...a11yProps(0)} />
+          <Tab label="Real-Time-Monitaling" {...a11yProps(1)} />
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={value} index={0}>
+        <LogsTable />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        <RealTime />
+      </CustomTabPanel>
     </div>
   );
 };

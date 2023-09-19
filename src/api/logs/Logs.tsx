@@ -3,7 +3,13 @@ import { GroupsType } from "../../types/group";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { Collection, InfomationLog, Log, Record } from "../../types/log";
+import {
+  CardLog,
+  Collection,
+  InfomationLog,
+  Log,
+  Record,
+} from "../../types/log";
 
 export const useFetchGroups = () => {
   const response = useQuery({
@@ -48,13 +54,14 @@ export const useFetchRecords = () => {
   return response;
 };
 
-export const useFetchInfomationLogs = () => {
+export const useFetchInfomationCardLogs = () => {
   const { logId } = useParams();
   const response = useQuery({
     queryKey: ["infomations", logId],
-    queryFn: async (): Promise<Log[]> => {
+    queryFn: async (): Promise<CardLog[]> => {
       const response = await axios.get(API_URL + "/logs/info/" + logId);
-      const data: Log[] = await response.data;
+      const data: CardLog[] = await response.data;
+      console.log(data);
       return data;
     },
   });
