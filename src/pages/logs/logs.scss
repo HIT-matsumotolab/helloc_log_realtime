@@ -27,7 +27,12 @@
       height: 120px;
       margin-bottom: 20px;
       // align-items: center;
+      // .circle-outer {
+      //   background-color: blue;
+      //   border-radius: 50%; /* 円形要素を作成 */
+      // }
       .circle {
+        border: 4px solid black; // 2pxの黒い枠線を追加
         background-color: white;
         width: 100px;
         height: 100px;
