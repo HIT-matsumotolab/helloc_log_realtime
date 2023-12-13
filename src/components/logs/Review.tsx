@@ -115,20 +115,22 @@ export const Review = () => {
                   ] ? (
                     <Circle
                       style={{
-                        width: `${
+                        width: `${Math.min(
+                          100,
                           10 *
-                          user.info[user.info.length - 1].card_detail_logs[
-                            user.info[user.info.length - 1].card_detail_logs
-                              .length - 1
-                          ].trial
-                        }px`,
-                        height: `${
+                            user.info[user.info.length - 1].card_detail_logs[
+                              user.info[user.info.length - 1].card_detail_logs
+                                .length - 1
+                            ].trial
+                        )}px`,
+                        height: `${Math.min(
+                          100,
                           10 *
-                          user.info[user.info.length - 1].card_detail_logs[
-                            user.info[user.info.length - 1].card_detail_logs
-                              .length - 1
-                          ].trial
-                        }px`,
+                            user.info[user.info.length - 1].card_detail_logs[
+                              user.info[user.info.length - 1].card_detail_logs
+                                .length - 1
+                            ].trial
+                        )}px`,
                         color: `rgb(255,0,0)`,
                       }}
                     />
